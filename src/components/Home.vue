@@ -6,6 +6,7 @@ export default {
   methods: {
     exit() {
       window.sessionStorage.clear()
+      //   退出
       this.$router.push('/login')
     }
   }
