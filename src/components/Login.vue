@@ -76,7 +76,7 @@ export default {
         if (valid) {
           // 发送ajax请求 看后台是否有这个用户
           const { data: res } = await this.$http.post('/login', this.loginform)
-          console.log(res)
+          // console.log(res)
           // 说明成功了
           if (res.meta.status === 200) {
             this.$message.success('登录成功')
