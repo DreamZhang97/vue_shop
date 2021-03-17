@@ -45,7 +45,13 @@
             </el-tooltip>
             <!-- 分配角色 -->
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" v-model="scope.row.id" icon="el-icon-setting" size="mini"></el-button>
+              <el-button
+                type="warning"
+                v-model="scope.row.id"
+                icon="el-icon-setting"
+                size="mini"
+                @click="alloRole(scope.row)"
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -106,6 +112,24 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="editUser(editForm.id)">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 分配角色 -->
+    <el-dialog title="分配角色" :visible.sync="alloRoleDialogVisible" width="30%" @close="clearAlloRole">
+      <div>
+        <p>当前用户名：{{ userInfo.username }}</p>
+        <p>当前角色：{{ userInfo.role_name }}</p>
+        <p>
+          分配新角色：
+          <el-select v-model="roleSelectedId" placeholder="请选择角色">
+            <el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"> </el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="alloRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editAlloRole">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -182,7 +206,13 @@ export default {
           { required: true, trigger: 'blur', message: '请输入电话号码' },
           { validator: mobileValide, trigger: 'blur' }
         ]
-      }
+      },
+      // 分配角色
+      alloRoleDialogVisible: false,
+      // 分配角色 数据回填
+      userInfo: [],
+      roleList: [],
+      roleSelectedId: ''
     }
   },
   // 生命周期开始 就加载
@@ -270,6 +300,29 @@ export default {
       this.editDialogVisible = false
       this.$message.success('修改成功')
       this.getUserList()
+    },
+    // 分配角色
+    async alloRole(user) {
+      this.userInfo = user
+      this.alloRoleDialogVisible = true
+      // 获取到所有角色
+      const { data: res } = await this.$http.get('roles')
+      this.roleList = res.data
+    },
+    // 修改分配角色
+    async editAlloRole() {
+      // console.log(this.roleSelectedId)
+      if (!this.roleSelectedId) {
+        return this.$message.error('没有选择角色')
+      }
+      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, { rid: this.roleSelectedId })
+      console.log(res)
+      if (res.meta.status !== 200) return this.$message.error('修改分配角色失败')
+      this.alloRoleDialogVisible = false
+      this.getUserList()
+    },
+    clearAlloRole() {
+      this.roleSelectedId = ''
     }
   }
 }
@@ -278,10 +331,7 @@ export default {
 .header {
   font-size: 12px;
 }
-.el-card {
-  margin-top: 15px;
-  box-shadow: -1px px rgba(92, 92, 92, 0.1) !important;
-}
+
 .el-table {
   margin-top: 10px;
 }
