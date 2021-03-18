@@ -90,7 +90,7 @@ export default {
     },
     // 通过点击 将其path传入到函数中，然后在浏览器的session中存入 每当点击的时候，就获取到这个名称，然后传递给上述绑定的activePath
     saveNavState(activePath) {
-      console.log(activePath)
+      // console.log(activePath)
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
     }
