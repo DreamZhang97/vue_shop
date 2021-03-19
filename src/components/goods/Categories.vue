@@ -36,7 +36,7 @@
         </template>
         <!-- 操作 -->
         <template slot-scope="scope" slot="operate">
-          <el-button type="primary" icon="el-icon-edit" @click="eidt(scope.row)">操作</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="toEidtCate(scope.row)">操作</el-button>
           <el-button type="danger" icon="el-icon-delete" @click="deleteByCateId(scope.row)">删除</el-button>
         </template>
       </tree-table>
@@ -77,6 +77,19 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="clearBox">取 消</el-button>
         <el-button type="primary" @click="addCate">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 修改窗口 -->
+    <el-dialog title="添加分类" :visible.sync="editFormVisible" width="30%">
+      <el-form :model="editForm" ref="editFormRef" :rules="addFormRules" label-width="80px">
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="editForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editCate">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -145,7 +158,10 @@ export default {
       // 添加窗口显示与否
       dialogFormVisible: false,
       // 选中的父级分类的id
-      selectedKeys: []
+      selectedKeys: [],
+      // 修改用户
+      editForm: {},
+      editFormVisible: false
     }
   },
   created() {
@@ -174,7 +190,7 @@ export default {
       this.dialogFormVisible = true
       this.getParentCate()
     },
-    // 获取所有的父级分类
+    //获取所有的父级分类
     async getParentCate() {
       const { data: res } = await this.$http.get('categories', { params: { type: 2 } })
       // console.log(res.data)
@@ -222,6 +238,35 @@ export default {
         this.$message.success('添加分类成功')
         this.getAllCate()
         this.dialogFormVisible = false
+      })
+    },
+    // 删除分类
+    async deleteByCateId(role) {
+      const { data: res } = await this.$http.delete(`categories/${role.cat_id}`, { id: role.cat_pid })
+      if (res.meta.status !== 200) return this.$message.success('删除分类失败')
+      this.$message.success('删除分类成功')
+      this.getAllCate()
+    },
+    // 根据id查询
+    async toEidtCate(row) {
+      this.editFormVisible = true
+      // 获取到id 然后查询到名称
+      const { data: res } = await this.$http.get(`categories/${row.cat_id}`)
+      if (res.meta.status !== 200) return this.$message.error('获取失败')
+      this.editForm = res.data
+    },
+    // 修改
+    editCate() {
+      this.$refs.editFormRef.validate(async (valid) => {
+        if (!valid) return this.$message.error('修改失败')
+        // console.log(this.editForm)
+        const { data: res } = await this.$http.put(`categories/${this.editForm.cat_id}`, {
+          cat_name: this.editForm.cat_name
+        })
+        if (res.meta.status !== 200) return this.$message.error('修改失败')
+        this.$message.success('修改成功')
+        this.editFormVisible = false
+        this.getAllCate()
       })
     }
   }

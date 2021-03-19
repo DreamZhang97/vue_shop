@@ -10,9 +10,11 @@ body,
   margin-top: 20px;
   box-shadow: -1px px rgba(92, 92, 92, 0.1) !important;
 }
-.el-table {
-  margin-top: 15px;
-}
+.el-table,
+.el-tabs,
 .el-pagination {
   margin-top: 20px;
+}
+.el-alert {
+  margin-bottom: 20px;
 }
