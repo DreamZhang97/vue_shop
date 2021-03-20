@@ -185,13 +185,13 @@ export default {
     },
     // tab 标签页点击触发事件
     handleClick() {
-      //   console.log(this.activeName)
+      // console.log(this.activeName)
       this.getParamsData()
     },
     // 获取参数的列表数据
     async getParamsData() {
       const length = this.selectedKeys.length
-      //   我们只允许选中第三季的节点 其他的节点都是无效
+      // 我们只允许选中第三季的节点 其他的节点都是无效
       if (length !== 3) {
         this.selectedKeys = []
         // 让下方的many only数据也全都清空

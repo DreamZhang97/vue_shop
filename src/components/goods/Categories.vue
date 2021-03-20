@@ -4,7 +4,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+      <el-breadcrumb-item>商品分类</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片布局 -->
     <el-card>
@@ -190,7 +190,7 @@ export default {
       this.dialogFormVisible = true
       this.getParentCate()
     },
-    //获取所有的父级分类
+    // 获取所有的父级分类
     async getParentCate() {
       const { data: res } = await this.$http.get('categories', { params: { type: 2 } })
       // console.log(res.data)

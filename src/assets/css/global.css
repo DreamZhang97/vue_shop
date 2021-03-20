@@ -12,7 +12,8 @@ body,
 }
 .el-table,
 .el-tabs,
-.el-pagination {
+.el-pagination,
+.el-steps {
   margin-top: 20px;
 }
 .el-alert {
