@@ -12,6 +12,9 @@ import GoodsList from '../components/goods/List.vue'
 import AddGoods from '../components/goods/AddGoods.vue'
 import Order from '../components/order/Order.vue'
 import Report from '../components/report/Report.vue'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 Vue.use(VueRouter)
 const routes = [
   { path: '/', redirect: '/login' },
@@ -40,8 +43,11 @@ const routes = [
 const router = new VueRouter({
   routes
 })
+// 导入进度条相关
+// 在发送请求的时候就开始显示这个进度条 request
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   if (to.path === '/login') return next()
   // 从session中获取token 根据token来判断是否存有数据
   const tokenstr = window.sessionStorage.getItem('token')
@@ -49,5 +55,9 @@ router.beforeEach((to, from, next) => {
   if (!tokenstr) return next('/login')
   // 不满足上述两个 也就是登录了，他么直接放行
   next()
+})
+// 进入后守卫
+router.afterEach((to) => {
+  NProgress.done()
 })
 export default router

@@ -13,6 +13,8 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
+
+// 在请求得到响应之后 关闭进度条  response
 axios.defaults.baseURL = 'http://127.0.1:8000/api/private/v1'
 // 发送请求之前 先做一个拦截 在请求头中添加一个字段
 axios.interceptors.request.use((config) => {
@@ -20,6 +22,10 @@ axios.interceptors.request.use((config) => {
   // 在这个配置中 添加一个字段 y用来保存用户的信息
   config.headers.Authorization = getToken()
   // console.log(config)
+  return config
+})
+// 请求 完毕之后 关闭进度条
+axios.interceptors.response.use((config) => {
   return config
 })
 Vue.prototype.$http = axios
