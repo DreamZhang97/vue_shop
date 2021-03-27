@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/heima.png" alt="" />
+        <!-- <img src="../assets/heima.png" alt="" /> -->
         <span>后台管理系统</span>
       </div>
       <el-button type="info" @click="exit">退出</el-button>
