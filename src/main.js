@@ -17,7 +17,7 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 // 在请求得到响应之后 关闭进度条  response
 // axios.defaults.baseURL = 'http://127.0.1:8000/api/private/v1'
 // axios.defaults.baseURL = 'http://127.0.1/shop/api/private/v1'
-axios.defaults.baseURL = 'http://xuanqb.top/shop-api/private/v1'
+axios.defaults.baseURL = 'https://xuanqb.top/shop-api/private/v1'
 // 发送请求之前 先做一个拦截 在请求头中添加一个字段
 axios.interceptors.request.use((config) => {
   // console.log(config)
